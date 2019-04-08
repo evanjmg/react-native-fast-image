@@ -76,9 +76,13 @@
 - (void)imageDidLoadObserver:(NSNotification *)notification {
     FFFastImageSource *source = notification.object;
     if (source != nil) {
-        BOOL responds = [source.url respondsToSelector:@selector(sd_setImageWithURL)];
+        BOOL responds = [self respondsToSelector:@selector(sd_setImageWithURL:)];
         if (responds == YES) {
-            [self sd_setImageWithURL:source.url];
+            @try {
+                [self sd_setImageWithURL:source.url];
+            } @catch (NSException * e) {
+                NSLog(@"Exception: %@", e);
+            }
         }
     }
 }
